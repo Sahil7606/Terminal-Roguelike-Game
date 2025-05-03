@@ -11,6 +11,7 @@ class Rect:
     Methods:
         center() -> (Point): returns the center of the rectangle in the form (x, y)
         intersects(other: Rect) -> bool: returns whether or not the rectangle intersects with the other
+        split(direction, offset) -> tuple(Rect): splits rectangle and returns a tuple with the resulting rectangles
     """
 
     def __init__(self, x, y, width, height):
@@ -77,11 +78,20 @@ class BSP_Node:
         area (Rect): the rectangle this node represents
         left, right (BSP_Node): child nodes
         room (Rect): the room placed in this region (only for leaves)
+
+    Methods:
+        split(): Splits the area of the node and assigns those spaces to the chilren of the node
     """
     def __init__(self, area, left, right, room = None):
         self.area = area
         self.left = left
         self.right = right
 
+# Maybe this would be better as a function
 class Dungeon_Generator:
+    """
+    Attributes:
+        bsp_root (BSP_Node): the root of the bsp tree to be split into rooms
+
+    """
     pass
