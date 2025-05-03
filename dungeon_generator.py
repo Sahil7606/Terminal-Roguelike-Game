@@ -19,19 +19,25 @@ class Rect:
         self.width = width
         self.height = height
 
-    def get_corners(self):
-        """
-        Returns a list[Point] with all 4 corners of the rectangle in it
-        """
-        corners = [
-            self.pos,
-            Point(self.pos.x + self.width, self.pos.y),
-            Point(self.pos.x, self.pos.y + self.height),
-            Point(self.pos.x + self.width, self.pos.y + self.height)
-        ]
+    @property
+    def x(self): return self.pos.x
 
-        return corners
+    @property
+    def y(self): return self.pos.y
 
+    @property
+    def bottom_right(self) -> Point:
+        return Point(self.x + self.width, self.y)
+
+    @property
+    def top_left(self) -> Point:
+        return Point(self.x, self.y + self.height)
+
+    @property
+    def top_right(self) -> Point:
+        return Point(self.x + self.width, self.y + self.height)
+
+    @property
     def center(self):
         """
         Returns a Point object representing the center of the rectangle
@@ -49,26 +55,18 @@ class Rect:
             (bool): True if the Point is inside the Rect, False if not
         """
         return (
-            self.pos.x <= other.x < self.pos.x + self.width and
-            self.pos.y <= other.y < self.pos.y + self.height
+            self.x <= other.x < self.x + self.width and
+            self.y <= other.y < self.y + self.height
         )
-    
-    def intersects(self, other: 'Rect') -> bool:
-        """
-        Checks if a rectangle overlaps the current rectangle
 
-        Args:
-            other (Rect): the other rectangle to check for overlap with
+    def split(self, direction, offset) -> tuple['Rect']:
+        # if direction == 'y':
+            # Calculate partition point
+            # Calculate new rect bounds
 
-        Returns:
-            (bool): True if they intersect, False if not
-        """
-        return not (
-            self.pos.x + self.width <= other.pos.x or
-            self.pos.x >= other.pos.x + other.width or
-            self.pos.y + self.height <= other.pos.y or
-            self.pos.y >= other.pos.y + other.height
-        )
+        pass
+            
+
         
 class BSP_Node:
     """
