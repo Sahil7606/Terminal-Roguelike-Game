@@ -15,12 +15,14 @@ Though early in development, the foundation prioritizes clean geometry, testabil
 
 ## File Structure
 
+```
 khazad/
 |-- dungeon_generator.py (Core BSP logic, currently in progress)
 |-- renderer.py (throw NotImplementedException)
 |-- utils/
 | |-- types.py (Holds reusable dataclasses such as `Point`)
 |-- main.py (throw NotImplementedException, core game loop and entry point for the program)
+```
 
 ## Next Steps
 - Complete BSP algorithm
