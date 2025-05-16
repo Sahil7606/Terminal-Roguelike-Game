@@ -54,20 +54,24 @@ class Rect:
         Returns:
             (bool): True if the Point is inside the Rect, False if not
         """
+
         return (
             self.x <= other.x < self.x + self.width and
             self.y <= other.y < self.y + self.height
         )
 
-    def split(self, direction, offset) -> tuple['Rect']:
-        # if direction == 'y':
-            # Calculate partition point
-            # Calculate new rect bounds
+    def split(self, direction: str, offset: float) -> tuple['Rect']:
+        if direction == 'y':
+            offset_point = self.x + int(self.width * offset)
+            rect_1 = Rect(self.x, self.y, self.width - (self.bottom_right.x - offset_point), self.height)
+            rect_2 = Rect(offset_point, self.y, self.width - (offset_point - self.x), self.height)
+        else:
+            offset_point = self.y + int(self.height * offset)
+            rect_1 = Rect(self.x, self.y, self.width, self.height - (self.top_left.y - offset_point))
+            rect_2 = Rect(self.x, offset_point, self.width, self.height - (offset_point - self.y))
 
-        pass
+        return (rect_1, rect_2)
             
-
-        
 class BSP_Node:
     """
     Nodes for the BSP tree used for generation
@@ -80,16 +84,30 @@ class BSP_Node:
     Methods:
         split(): Splits the area of the node and assigns those spaces to the chilren of the node
     """
-    def __init__(self, area, left, right, room = None):
+
+    def __init__(self, area, left = None, right = None, room = None):
         self.area = area
         self.left = left
         self.right = right
 
-# Maybe this would be better as a function
-class Dungeon_Generator:
-    """
-    Attributes:
-        bsp_root (BSP_Node): the root of the bsp tree to be split into rooms
+    def split(self, direction: str, offset: float) -> None:
+        if self.left or self.right:
+            return "Cannot be split"
+        
+        areas = self.area.split(direction, offset)
+        self.left = BSP_Node(areas[0])
+        self.right = BSP_Node(areas[1])
+        
+import random
 
-    """
-    pass
+def generate_partitions(level: list[BSP_Node], depth: int):
+    if depth == 0:
+        return level
+    
+    next_level = []
+    for node in level:
+        node.split(random.choice(['x', 'y']), random.uniform(0.3, 0.7))
+        next_level.append(node.left)
+        next_level.append(node.right)
+
+    return generate_partitions(next_level, depth - 1)
