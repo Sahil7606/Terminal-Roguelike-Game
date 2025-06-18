@@ -98,6 +98,9 @@ class BSP_Node:
         self.left = BSP_Node(areas[0])
         self.right = BSP_Node(areas[1])
         
+# Need to define a min size and bias when splitting
+# divide height / width then use the ratio to make a bias in the random choice
+
 import random
 
 def generate_partitions(level: list[BSP_Node], depth: int):
