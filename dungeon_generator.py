@@ -90,10 +90,13 @@ class BSP_Node:
         self.left = left
         self.right = right
 
-    def split(self, direction: str, offset: float) -> None:
-        if self.left or self.right:
+    def split(self, direction: str, offset: float, min_size: int) -> None:
+        if (self.left or self.right):
             return "Cannot be split"
         
+        if self.area.width <= min_size or self.area.height <= min_size:
+            return "Cannot be split"
+
         areas = self.area.split(direction, offset)
         self.left = BSP_Node(areas[0])
         self.right = BSP_Node(areas[1])
@@ -107,9 +110,13 @@ def generate_partitions(level: list[BSP_Node], depth: int):
     if depth == 0:
         return level
     
+    def get_split_bias(node: BSP_Node) -> list:
+        proportion = node.area.height / node.area.width
+        pass
+    
     next_level = []
     for node in level:
-        node.split(random.choice(['x', 'y']), random.uniform(0.3, 0.7))
+        node.split(random.choice(['x', 'y']), random.uniform(0.35, 0.65))
         next_level.append(node.left)
         next_level.append(node.right)
 
