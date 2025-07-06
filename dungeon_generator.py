@@ -110,13 +110,28 @@ def generate_partitions(level: list[BSP_Node], depth: int):
     if depth == 0:
         return level
     
-    def get_split_bias(node: BSP_Node) -> list:
+    def get_split_bias(node: BSP_Node) -> list|None:
         proportion = node.area.height / node.area.width
-        pass
+        temp = []
+
+        if proportion < 1:
+            proportion = 1 / proportion
+            temp = ['y'] * int(proportion // 2)
+        else:
+            temp = ['x'] * int(proportion // 2)
+
+        if proportion >= 4:
+            return None
+
+        return ['x', 'y'] + temp
+
     
     next_level = []
     for node in level:
-        node.split(random.choice(['x', 'y']), random.uniform(0.35, 0.65))
+        split_bias = get_split_bias(node)
+        if not split_bias:
+            continue
+        node.split(random.choice(split_bias), random.uniform(0.4, 0.6), 1)
         next_level.append(node.left)
         next_level.append(node.right)
 
